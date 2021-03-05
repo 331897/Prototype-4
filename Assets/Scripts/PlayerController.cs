@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody playerRb;
     private GameObject focalPoint;
+    private AudioSource aS;
     private float powerupStrength = 15.0f;
     public float speed = 5.0f;
     public bool hasPowerup = false;
@@ -18,7 +19,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
+        aS = GetComponent<AudioSource>();
         focalPoint = GameObject.Find("Focal Point");
+        
     }
 
     // Update is called once per frame
@@ -37,6 +40,8 @@ public class PlayerController : MonoBehaviour
         {
             hasPowerup = true;
             powerupIndicator.gameObject.SetActive(true);
+            aS.Play();
+            Debug.Log("CHIDORIII" + aS.clip);
             Destroy(other.gameObject);
             StartCoroutine(PowerupCountdownRoutine());
         }
@@ -53,11 +58,19 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Enemy") && hasPowerup)
         {
+
             Rigidbody enemeyRigidbody = collision.gameObject.GetComponent<Rigidbody>();
             Vector3 awayFromPlayer = collision.gameObject.transform.position - transform.position;
-
             enemeyRigidbody.AddForce(awayFromPlayer * powerupStrength, ForceMode.Impulse);
             Debug.Log("Collided with: " + collision.gameObject.name + " with powerup set to " + hasPowerup);
+           
         }
     }
 }
+
+/*bounce.Play();
+Debug.Log("CHIDORIII" + bounce.clip);
+bounce = GetComponent<AudioSource>();
+private AudioSource bounce;*/
+
+
